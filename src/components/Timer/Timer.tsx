@@ -1,18 +1,26 @@
-import React from 'react';
+import React from "react";
 
-import TimerModel from '../../lib/models/TimerModel';
-import { TimePartsType } from 'src/lib/helpers/getTimeParts';
-import { TimerStateType } from 'src/lib/models/TimerState';
+import TimerModel from "../../lib/models/TimerModel";
+import { TimePartsType } from "src/lib/helpers/getTimeParts";
+import { TimerStateType } from "src/lib/models/TimerState";
 
 const TimerContext = React.createContext<TimePartsType>({
   ms: 0,
   s: 0,
   m: 0,
   h: 0,
-  d: 0,
+  d: 0
 });
 
-class TimerValue extends React.Component<{ value: number }> {
+function pad(n) {
+  return new Number(
+    Array(n)
+      .join("0")
+      .slice((n || 2) * -1) + this
+  );
+}
+
+class TimerValue extends React.Component<{ value: Number }> {
   public shouldComponentUpdate(nextProps) {
     const { value } = this.props;
 
@@ -31,38 +39,28 @@ class TimerValue extends React.Component<{ value: number }> {
 }
 
 const Milliseconds = () => (
-  <Timer.Consumer>
-    {({ ms }) => <TimerValue value={ms} />}
-  </Timer.Consumer>
+  <Timer.Consumer>{({ ms }) => <TimerValue value={pad(ms)} />}</Timer.Consumer>
 );
 
 const Seconds = () => (
-  <Timer.Consumer>
-    {({ s }) => <TimerValue value={s} />}
-  </Timer.Consumer>
+  <Timer.Consumer>{({ s }) => <TimerValue value={pad(s)} />}</Timer.Consumer>
 );
 
 const Minutes = () => (
-  <Timer.Consumer>
-    {({ m }) => <TimerValue value={m} />}
-  </Timer.Consumer>
+  <Timer.Consumer>{({ m }) => <TimerValue value={pad(m)} />}</Timer.Consumer>
 );
 
 const Hours = () => (
-  <Timer.Consumer>
-    {({ h }) => <TimerValue value={h} />}
-  </Timer.Consumer>
+  <Timer.Consumer>{({ h }) => <TimerValue value={pad(h)} />}</Timer.Consumer>
 );
 
 const Days = () => (
-  <Timer.Consumer>
-    {({ d }) => <TimerValue value={d} />}
-  </Timer.Consumer>
+  <Timer.Consumer>{({ d }) => <TimerValue value={pad(d)} />}</Timer.Consumer>
 );
 
 interface TimerProps {
   /** Timer count direction */
-  direction?: 'forward' | 'backward';
+  direction?: "forward" | "backward";
   /** Inittial time on timer */
   initialTime?: number;
   /** Time to rerender */
@@ -80,7 +78,7 @@ interface TimerProps {
   /** Function that will be called on timer reset */
   onReset?: () => any;
   /** Last unit will accumulate time, for example, 26 hours or 90 seconds */
-  lastUnit?: 'ms' | 's' | 'm' | 'h' | 'd';
+  lastUnit?: "ms" | "s" | "m" | "h" | "d";
   /** Time checkpoints with callback functions */
   checkpoints?: Array<{
     time: number;
@@ -102,17 +100,17 @@ class Timer extends React.PureComponent<TimerProps, TimerState> {
 
   public static defaultProps = {
     timeToUpdate: 1000,
-    direction: 'forward',
+    direction: "forward",
     initialTime: 0,
     startImmediately: true,
-    lastUnit: 'd',
+    lastUnit: "d",
     checkpoints: [],
     children: null,
     onStart: () => {},
     onResume: () => {},
     onPause: () => {},
     onStop: () => {},
-    onReset: () => {},
+    onReset: () => {}
   };
 
   public static getUI(children, renderProps) {
@@ -128,11 +126,11 @@ class Timer extends React.PureComponent<TimerProps, TimerState> {
       return React.createElement(children, renderProps);
     }
 
-    if (typeof children === 'function') {
+    if (typeof children === "function") {
       return children(renderProps);
     }
 
-    throw new Error('Please use one of the supported APIs for children');
+    throw new Error("Please use one of the supported APIs for children");
   }
 
   private timer: TimerModel;
@@ -141,7 +139,11 @@ class Timer extends React.PureComponent<TimerProps, TimerState> {
     super(props);
 
     const {
-      initialTime, direction, timeToUpdate, lastUnit, checkpoints,
+      initialTime,
+      direction,
+      timeToUpdate,
+      lastUnit,
+      checkpoints
     } = this.props;
 
     this.timer = new TimerModel({
@@ -150,12 +152,12 @@ class Timer extends React.PureComponent<TimerProps, TimerState> {
       timeToUpdate,
       lastUnit,
       checkpoints,
-      onChange: this.setState.bind(this),
+      onChange: this.setState.bind(this)
     });
 
     this.state = {
       ...this.timer.timeParts,
-      timerState: 'INITED',
+      timerState: "INITED"
     };
 
     this.start = this.start.bind(this);
@@ -182,19 +184,22 @@ class Timer extends React.PureComponent<TimerProps, TimerState> {
 
   public render() {
     const {
-      start, pause, resume, stop, reset,
-      getTime, getTimerState,
-      setTime, setDirection, setCheckpoints,
+      start,
+      pause,
+      resume,
+      stop,
+      reset,
+      getTime,
+      getTimerState,
+      setTime,
+      setDirection,
+      setCheckpoints
     } = this;
-    const {
-      ms, s, m, h, d, timerState,
-    } = this.state;
+    const { ms, s, m, h, d, timerState } = this.state;
     const { children } = this.props;
 
     return (
-      <TimerContext.Provider
-        value={{ ms, s, m, h, d }}
-      >
+      <TimerContext.Provider value={{ ms, s, m, h, d }}>
         {Timer.getUI(children, {
           start,
           resume,
@@ -206,7 +211,7 @@ class Timer extends React.PureComponent<TimerProps, TimerState> {
           setTime,
           setDirection,
           setCheckpoints,
-          timerState,
+          timerState
         })}
       </TimerContext.Provider>
     );

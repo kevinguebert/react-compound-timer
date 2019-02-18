@@ -1,4 +1,4 @@
-export type Unit = 'ms' | 's' | 'm' | 'h' | 'd';
+export type Unit = "ms" | "s" | "m" | "h" | "d";
 
 export interface TimePartsType {
   ms: number;
@@ -8,9 +8,12 @@ export interface TimePartsType {
   d: number;
 }
 
-export default function getTimeParts(time: number, lastUnit: Unit): TimePartsType {
-  const units: Unit[] = ['ms', 's', 'm', 'h', 'd'];
-  const lastUnitIndex = units.findIndex((unit) => unit === lastUnit);
+export default function getTimeParts(
+  time: number,
+  lastUnit: Unit
+): TimePartsType {
+  const units: Unit[] = ["ms", "s", "m", "h", "d"];
+  const lastUnitIndex = units.findIndex(unit => unit === lastUnit);
 
   const dividers = [1000, 60, 60, 24, 1];
   const dividersAcc = [1, 1000, 60000, 3600000, 86400000];
@@ -20,7 +23,7 @@ export default function getTimeParts(time: number, lastUnit: Unit): TimePartsTyp
     s: 0,
     m: 0,
     h: 0,
-    d: 0,
+    d: 0
   };
 
   const output = units.reduce((obj, unit, index) => {
