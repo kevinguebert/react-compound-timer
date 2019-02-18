@@ -31,11 +31,6 @@ var TimerContext = React.createContext({
     h: 0,
     d: 0
 });
-function pad(n) {
-    return new Number(Array(n)
-        .join("0")
-        .slice((n || 2) * -1) + this);
-}
 var TimerValue = /** @class */ (function (_super) {
     __extends(TimerValue, _super);
     function TimerValue() {
@@ -50,29 +45,33 @@ var TimerValue = /** @class */ (function (_super) {
     };
     TimerValue.prototype.render = function () {
         var value = this.props.value;
-        return String(value) || null;
+        var stringValue = String(value);
+        if (value < 10) {
+            stringValue = "0" + stringValue;
+        }
+        return stringValue || null;
     };
     return TimerValue;
 }(React.Component));
 var Milliseconds = function () { return (React.createElement(Timer.Consumer, null, function (_a) {
     var ms = _a.ms;
-    return React.createElement(TimerValue, { value: pad(ms) });
+    return React.createElement(TimerValue, { value: ms });
 })); };
 var Seconds = function () { return (React.createElement(Timer.Consumer, null, function (_a) {
     var s = _a.s;
-    return React.createElement(TimerValue, { value: pad(s) });
+    return React.createElement(TimerValue, { value: s });
 })); };
 var Minutes = function () { return (React.createElement(Timer.Consumer, null, function (_a) {
     var m = _a.m;
-    return React.createElement(TimerValue, { value: pad(m) });
+    return React.createElement(TimerValue, { value: m });
 })); };
 var Hours = function () { return (React.createElement(Timer.Consumer, null, function (_a) {
     var h = _a.h;
-    return React.createElement(TimerValue, { value: pad(h) });
+    return React.createElement(TimerValue, { value: h });
 })); };
 var Days = function () { return (React.createElement(Timer.Consumer, null, function (_a) {
     var d = _a.d;
-    return React.createElement(TimerValue, { value: pad(d) });
+    return React.createElement(TimerValue, { value: d });
 })); };
 var Timer = /** @class */ (function (_super) {
     __extends(Timer, _super);

@@ -12,10 +12,6 @@ const TimerContext = React.createContext<TimePartsType>({
   d: 0
 });
 
-function pad(time: number) {
-  return new Array(time).join("0").slice((time || 2) * -1) + this;
-}
-
 class TimerValue extends React.Component<{ value: number }> {
   public shouldComponentUpdate(nextProps) {
     const { value } = this.props;
@@ -29,8 +25,12 @@ class TimerValue extends React.Component<{ value: number }> {
 
   public render() {
     const { value } = this.props;
+    let stringValue = String(value);
+    if (value < 10) {
+      stringValue = "0" + stringValue;
+    }
 
-    return String(pad(value)) || null;
+    return stringValue || null;
   }
 }
 
