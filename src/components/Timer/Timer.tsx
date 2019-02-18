@@ -13,14 +13,10 @@ const TimerContext = React.createContext<TimePartsType>({
 });
 
 function pad(n) {
-  return new Number(
-    Array(n)
-      .join("0")
-      .slice((n || 2) * -1) + this
-  );
+  return new Array(n).join("0").slice((n || 2) * -1) + this;
 }
 
-class TimerValue extends React.Component<{ value: Number }> {
+class TimerValue extends React.Component<{ value: number }> {
   public shouldComponentUpdate(nextProps) {
     const { value } = this.props;
 
@@ -39,23 +35,23 @@ class TimerValue extends React.Component<{ value: Number }> {
 }
 
 const Milliseconds = () => (
-  <Timer.Consumer>{({ ms }) => <TimerValue value={pad(ms)} />}</Timer.Consumer>
+  <Timer.Consumer>{({ ms }) => <TimerValue value={+pad(ms)} />}</Timer.Consumer>
 );
 
 const Seconds = () => (
-  <Timer.Consumer>{({ s }) => <TimerValue value={pad(s)} />}</Timer.Consumer>
+  <Timer.Consumer>{({ s }) => <TimerValue value={+pad(s)} />}</Timer.Consumer>
 );
 
 const Minutes = () => (
-  <Timer.Consumer>{({ m }) => <TimerValue value={pad(m)} />}</Timer.Consumer>
+  <Timer.Consumer>{({ m }) => <TimerValue value={+pad(m)} />}</Timer.Consumer>
 );
 
 const Hours = () => (
-  <Timer.Consumer>{({ h }) => <TimerValue value={pad(h)} />}</Timer.Consumer>
+  <Timer.Consumer>{({ h }) => <TimerValue value={+pad(h)} />}</Timer.Consumer>
 );
 
 const Days = () => (
-  <Timer.Consumer>{({ d }) => <TimerValue value={pad(d)} />}</Timer.Consumer>
+  <Timer.Consumer>{({ d }) => <TimerValue value={+pad(d)} />}</Timer.Consumer>
 );
 
 interface TimerProps {
